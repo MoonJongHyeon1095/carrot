@@ -1,0 +1,27 @@
+footer {
+  padding-bottom: 30px;
+  position: fixed;
+  bottom: 0;
+  width: 100vw;
+  /* 100view width, 화면 100%를 채운다 */
+}
+
+.footer-block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-icons {
+  margin: 0 10px 0 10px;
+  font-size: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* flex 방향 바꾸기 */
+  flex-direction: column;
+}
+
+.footer-icons__img {
+  width: 30px;
+}

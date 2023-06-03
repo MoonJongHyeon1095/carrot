@@ -1,3 +1,3 @@
 # carrot
 
-##heroes icon 및 CSS 연습
+##heroes icon, pretendart font 및 CSS 연습
