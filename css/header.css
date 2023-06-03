@@ -1,0 +1,58 @@
+header {
+  margin-top: 20px;
+  border-bottom: 1px solid gainsboro;
+  padding-bottom: 10px;
+}
+
+.info-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px 0 10px;
+}
+
+.info-bar__icons img {
+  width: 15px;
+}
+
+.info-bar__time {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.menu-bar {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu-bar__location {
+  padding-top: 5px;
+  padding-left: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+.menu-bar__location img {
+  width: 15px;
+}
+
+.menu-bar__location-화살표 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu-bar__icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu-bar__icons img {
+  width: 25px;
+  margin-right: 10px;
+}
