@@ -20,12 +20,11 @@ body {
   justify-content: center;
   align-items: center;
   background-color: wheat;
-  opacity: 1;
 }
 
 /* 미디어쿼리 */
 @media screen and (max-width: 680px) {
   .media-info-msg {
-    opacity: 0;
+    display: none;
   }
 }
