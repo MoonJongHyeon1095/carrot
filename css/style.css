@@ -11,7 +11,7 @@ body {
 }
 
 .media-info-msg {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
@@ -20,12 +20,11 @@ body {
   justify-content: center;
   align-items: center;
   background-color: wheat;
-  opacity: 1;
 }
 
 /* 미디어쿼리 */
 @media screen and (max-width: 680px) {
   .media-info-msg {
-    opacity: 0;
+    display: none;
   }
 }
