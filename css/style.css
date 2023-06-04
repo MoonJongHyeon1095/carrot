@@ -9,3 +9,23 @@ body {
     "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
     sans-serif;
 }
+
+.media-info-msg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: wheat;
+  opacity: 1;
+}
+
+/* 미디어쿼리 */
+@media screen and (max-width: 680px) {
+  .media-info-msg {
+    opacity: 0;
+  }
+}
