@@ -2,12 +2,12 @@ main {
   /* display: flex;
   justify-content: center;
   align-items: center; */
-  padding: 30px 20px 30px 20px;
+  padding: 30px 20px 100px 20px;
 }
 
 .item-list {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   border-bottom: 1px solid gainsboro;
   padding: 20px 0 20px 0;
@@ -22,10 +22,11 @@ main {
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   margin-right: 20px;
+  overflow: hidden;
 }
 
 .item-list__img img {
-  width: 50px;
+  width: 100%;
   /* object-fit: scale-down; */
 }
 
@@ -44,6 +45,10 @@ main {
 .item-list__info-meta {
   font-size: smaller;
   color: rgba(0, 0, 0, 0.5);
+}
+
+.item-list__info-price {
+  font-weight: bold;
 }
 
 .write-btn {
