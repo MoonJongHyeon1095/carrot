@@ -1,7 +1,9 @@
-from fastapi import FastAPI, UploadFile, Form, Response
+from fastapi import FastAPI, UploadFile, Form, Response, Depends
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from fastapi.staticfiles import StaticFiles
+from fastapi_login import LoginManager
+from fastapi_login.exceptions import InvalidCredentialsException
 from typing import Annotated
 import sqlite3
 
@@ -11,8 +13,82 @@ import sqlite3
 conn = sqlite3.connect('db.db', check_same_thread=False)
 cur = conn.cursor()
 
+cur.execute(f"""
+            CREATE TABLE IF NOT EXISTS items (
+                id INTEGER PRIMARY KEY,
+                title TEXT NOT NULL,
+                image BLOB,
+                price INTEGER NOT NULL,
+                description TEXT,
+                place TEXT NOT NULL,
+                insertAT INTEGER NOT NULL
+            )
+            """)
+
+cur.execute(f"""
+            CREATE TABLE IF NOT EXISTS users (
+	          id TEXT PRIMARY KEY,
+	          name TEXT NOT NULL,
+	          email TEXT NOT NULL,
+	          password TEXT NOT NULL
+            )
+            """)
+
 app = FastAPI()
 
+SECRET = "test"
+manager = LoginManager(SECRET, '/login.html')
+
+# ??????????? 
+@manager.user_loader()
+def query_user(id_datum):
+    #id가 문자열로 들어올 경우와 그렇지 않을 경우
+    WHERE_STATEMENTS = f'''id="{id_datum}"'''
+    if type(id_datum) == dict:
+        WHERE_STATEMENTS = f'''id="{id_datum['id']}"'''
+    
+    # 칼럼명 같이 가져오기
+    conn.row_factory = sqlite3.Row
+    cur = conn.cursor()
+    user = cur.execute(f"""
+                       SELECT * from users WHERE {WHERE_STATEMENTS}
+                       """).fetchone()
+
+    return user
+
+@app.post('/login')
+def login(id: Annotated[str, Form()],
+          password: Annotated[str, Form()]):
+    user = query_user(id)
+    if not user:
+        raise InvalidCredentialsException
+    elif password != user['password']:
+        raise InvalidCredentialsException
+    
+    # 왜 sub라는 이름으로 그 안에 또 객체로 넣어야 하는가? 문서확인 요망
+    access_token = manager.create_access_token(data={
+        'sub':{
+            'name':user['name'],
+            'email':user['email'],
+            'id':user['id']
+        }
+    })
+    return {'access_token':access_token}
+    
+
+@app.post('/signup')
+def signup(id: Annotated[str, Form()],
+           password: Annotated[str, Form()],
+           name: Annotated[str, Form()],
+           email: Annotated[str, Form()]):
+    cur.execute(f"""
+                INSERT INTO users(id,name,email,password)
+                VALUES ('{id}','{name}','{email}','{password}')
+                """)
+    conn.commit()
+    return '200'
+
+    
 @app.post('/items')
 async def create_items(
     image: UploadFile,
@@ -31,7 +107,7 @@ async def create_items(
     return '200'
 
 @app.get('/items')
-async def get_items():
+async def get_items(user=Depends(manager)):
     # 칼럼명 같이 가져오기
     conn.row_factory = sqlite3.Row
     cur = conn.cursor()
@@ -49,6 +125,6 @@ async def get_image(item_id):
     image_bytes = cur.execute(f"""
                               SELECT image from items WHERE id={item_id}
                               """).fetchone()[0] #튜플에서 불필요한 메타데이터 버리기
-    return Response(content=bytes.fromhex(image_bytes))
+    return Response(content=bytes.fromhex(image_bytes), media_type='image/*')
 
 app.mount("/", StaticFiles(directory="front", html=True), name="front")
