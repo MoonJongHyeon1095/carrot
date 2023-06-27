@@ -41,11 +41,23 @@ header {
   align-items: center;
 }
 .menu-bar__icons {
+  position: relative; // 기준점 설정
   display: flex;
   justify-content: center;
   align-items: center;
   img {
     width: 25px;
     margin-right: 10px;
+
+    &.unread {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 10px;
+      height: 10px;
+      background-color: red;
+      border-radius: 50%;
+    }
   }
 }

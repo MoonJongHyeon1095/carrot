@@ -47,6 +47,7 @@ header {
 }
 
 .menu-bar__icons {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -54,6 +55,16 @@ header {
 .menu-bar__icons img {
   width: 25px;
   margin-right: 10px;
+}
+.menu-bar__icons img.unread {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
 }
 
 /*# sourceMappingURL=header.css.map */
