@@ -11,6 +11,7 @@ const handleSubmit = async (event) => {
     body: formData,
   });
   const data = await res.json();
+  console.log(data);
   const accessToken = data.access_token;
   if (accessToken) {
     localStorage.setItem("token", accessToken);

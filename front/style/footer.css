@@ -1,0 +1,46 @@
+@keyframes icons-hover {
+  0% {
+    transform: translateY(0px);
+  }
+  30% {
+    transform: translateY(-10px);
+  }
+  70% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+footer {
+  background-color: white;
+  padding-bottom: 30px;
+  position: fixed;
+  bottom: 0;
+  width: 100vw;
+}
+
+.footer-block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-icons {
+  cursor: pointer;
+  margin: 0 10px 0 10px;
+  font-size: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.footer-icons__img {
+  width: 30px;
+}
+.footer-icons__img:hover {
+  animation: icons-hover 2s;
+}
+
+/*# sourceMappingURL=footer.css.map */

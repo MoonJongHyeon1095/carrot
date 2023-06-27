@@ -43,9 +43,9 @@ manager = LoginManager(SECRET, '/login.html')
 @manager.user_loader()
 def query_user(id_datum):
     #id가 문자열로 들어올 경우와 그렇지 않을 경우
-    WHERE_STATEMENTS = f'''id="{id_datum}"'''
+    WHERE_STATEMENTS = f'id="{id_datum}"'
     if type(id_datum) == dict:
-        WHERE_STATEMENTS = f'''id="{id_datum['id']}"'''
+        WHERE_STATEMENTS = f'id="{id_datum["id"]}"'
     
     # 칼럼명 같이 가져오기
     conn.row_factory = sqlite3.Row
@@ -64,13 +64,14 @@ def login(id: Annotated[str, Form()],
         raise InvalidCredentialsException
     elif password != user['password']:
         raise InvalidCredentialsException
-    
+    print(password)
+    print( user['password'])
     # 왜 sub라는 이름으로 그 안에 또 객체로 넣어야 하는가? 문서확인 요망
     access_token = manager.create_access_token(data={
         'sub':{
+            'id':user['id'],
             'name':user['name'],
             'email':user['email'],
-            'id':user['id']
         }
     })
     return {'access_token':access_token}
@@ -112,7 +113,7 @@ async def get_items(user=Depends(manager)):
     conn.row_factory = sqlite3.Row
     cur = conn.cursor()
     rows = cur.execute(f"""
-                       SELECT * from items;
+                       SELECT * from items ORDER BY insertAt DESC LIMIT 10;
                        """).fetchall()
     
     return JSONResponse(
