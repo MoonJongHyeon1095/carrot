@@ -42,5 +42,5 @@ def create_fake_item():
         print('Failed to create fake item.')
 
 # Call the create_fake_item function 1000 times
-for _ in range(1000):
+for _ in range(100):
     create_fake_item()

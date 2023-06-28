@@ -100,12 +100,17 @@ async def create_items(
     place: Annotated[str, Form()],
     insertAt: Annotated[int,Form()]
 ):
-    image_bytes = await image.read()
-    cur.execute(f"""
+    async def insert_item():
+        image_bytes = await image.read()
+        cur.execute(f"""
                 INSERT INTO items(title,image,price,description,place,insertAt)
                 VALUES ('{title}','{image_bytes.hex()}',{price},'{description}','{place}',{insertAt})
                 """)
-    conn.commit()
+        conn.commit()
+        
+        # 병렬로 실행할 비동기 함수들을 gather에 전달하여 실행
+    results = await asyncio.gather(insert_item())
+    print(results)
     return '200'
 
 @app.get('/items')
