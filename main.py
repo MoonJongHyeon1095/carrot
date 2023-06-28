@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, Form, Response, Depends
+from fastapi import FastAPI, UploadFile, Form, Response, Depends, Request
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from fastapi.staticfiles import StaticFiles
@@ -90,15 +90,18 @@ def signup(id: Annotated[str, Form()],
     conn.commit()
     return '200'
 
-    
+#Annotated[str, Form()]은 str 유형의 변수에 Form()이라는 메타데이터를 추가하는 것  
+#FastAPI 프레임워크는 pydantic을 내부적으로 사용하여 요청 파라미터 유효성 검사와 데이터 변환을 처리  
+#Annotated를 통한 메타데이터 추가는 유효성 검사 및 데이터 변환 파이프라인을 구축하는 데 도움을 주는 것으로 볼 수 있습니다. 이를 통해 코드의 안정성과 신뢰성을 높일 수 있습니다.
 @app.post('/items')
 async def create_items(
     image: UploadFile,
-    title: Annotated[str, Form()],
+    title: Annotated[str, Form()], 
     price: Annotated[int, Form()],
     description: Annotated[str, Form()],
     place: Annotated[str, Form()],
     insertAt: Annotated[int,Form()]
+    # request: Request
 ):
     async def insert_item():
         image_bytes = await image.read()
@@ -112,6 +115,44 @@ async def create_items(
     results = await asyncio.gather(insert_item())
     print(results)
     return '200'
+    # async def insert_item(request):
+    #      # Extract data from request
+    #     form_data = await request.form()
+        
+    #     image_bytes = await form_data['image'].read()
+    #     title = form_data['title']
+    #     price = int(form_data['price'])
+    #     description = form_data['description']
+    #     place = form_data['place']
+    #     insertAt = int(form_data['insertAt'])
+        
+    #     cur.execute(f"""
+    #         INSERT INTO items(title,image,price,description,place,insertAt)
+    #         VALUES ('{title}','{image_bytes.hex()}',{price},'{description}','{place}',{insertAt})
+    #     """)
+    #     conn.commit()
+
+    # queue = asyncio.Queue()
+    # tasks = []
+
+    # # 요청을 큐에 추가
+    # while True:
+    #     form_data = await request.form()
+    #     if not form_data:
+    #         break
+    #     await queue.put(form_data)
+
+    # # 코루틴을 생성하고 실행
+    # for _ in range(10):  # 병렬로 실행할 코루틴 수
+    #     task = asyncio.create_task(insert_item(queue.get()))
+    #     tasks.append(task)
+
+    
+    # # 모든 코루틴의 실행 완료를 기다림
+    # await asyncio.gather(*tasks)
+
+    # return '200'
+    
 
 @app.get('/items')
 async def get_items(user=Depends(manager)):

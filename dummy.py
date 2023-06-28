@@ -1,4 +1,4 @@
-from dummy import Faker
+from faker import Faker
 import requests
 from datetime import datetime
 
@@ -42,5 +42,5 @@ def create_fake_item():
         print('Failed to create fake item.')
 
 # Call the create_fake_item function 1000 times
-for _ in range(100):
+for _ in range(10):
     create_fake_item()
