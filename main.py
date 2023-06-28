@@ -6,6 +6,7 @@ from fastapi_login import LoginManager
 from fastapi_login.exceptions import InvalidCredentialsException
 from typing import Annotated
 import sqlite3
+import asyncio
 
 # 기본적으로 check_same_thread는 True며, 만들고 있는 스레드 만 이 연결을 사용할 수 있습니다. 
 # False로 설정하면 반환된 연결을 여러 스레드에서 공유할 수 있습니다. 
