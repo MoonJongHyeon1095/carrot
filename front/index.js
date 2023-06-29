@@ -77,9 +77,6 @@ const fetchList = async (currentPage) => {
 };
 
 const getNext = (targetPage) => {
-  // const targetPage = document.querySelector(
-  //   ".pagination__page.active"
-  // ).innerText;
   currentPage = targetPage; // 다음 페이지로 이동
   fetchList(currentPage); // 다음 페이지 데이터 가져오기
 };

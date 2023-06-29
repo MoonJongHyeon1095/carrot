@@ -154,7 +154,7 @@ async def create_items(
     # return '200'
     
 
-@app.get('/items')
+@app.get('/items') #page: int = 1기본값으로 1을 가지며, 해당 파라미터가 전달되지 않았을 때 사용되는 값
 async def get_items(page: int = 1, user=Depends(manager)):
     print('page:', page)
     conn.execute("BEGIN TRANSACTION")  # 트랜잭션 시작
