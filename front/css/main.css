@@ -51,6 +51,26 @@ main {
   font-weight: bold;
 }
 
+.pagination__pages {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination__page {
+  margin: 0 5px;
+  padding: 5px 10px;
+  background-color: lightgray;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.pagination__page:hover {
+  background-color: gray;
+  color: white;
+}
+
 .write-btn {
   background-color: var(--button-primary);
   color: white;

@@ -13,6 +13,8 @@ const calculateTime = (timestamp) => {
 
 const renderData = (data) => {
   const main = document.querySelector("main");
+  // 이전 데이터 삭제
+  main.innerHTML = "";
 
   data.reverse().map(async (obj) => {
     const div = document.createElement("div");
@@ -55,9 +57,11 @@ const renderData = (data) => {
   });
 };
 
-const fetchList = async () => {
+let currentPage = 1; // 현재 페이지 초기값
+
+const fetchList = async (currentPage) => {
   const accessToken = window.localStorage.getItem("token");
-  const res = await fetch("/items", {
+  const res = await fetch(`/items?page=${currentPage}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
@@ -72,4 +76,24 @@ const fetchList = async () => {
   renderData(data);
 };
 
-fetchList();
+const getNext = (targetPage) => {
+  // const targetPage = document.querySelector(
+  //   ".pagination__page.active"
+  // ).innerText;
+  currentPage = targetPage; // 다음 페이지로 이동
+  fetchList(currentPage); // 다음 페이지 데이터 가져오기
+};
+
+const paginationBtns = document.querySelectorAll(".pagination__page");
+const loadMoreBtn = document.getElementById("loadMoreBtn");
+
+paginationBtns.forEach((btn, index) => {
+  btn.addEventListener("click", () => {
+    const targetPage = btn.innerText;
+    getNext(targetPage);
+  });
+});
+
+loadMoreBtn.addEventListener("click", () => {});
+
+fetchList(currentPage);

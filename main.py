@@ -155,13 +155,30 @@ async def create_items(
     
 
 @app.get('/items')
-async def get_items(user=Depends(manager)):
+async def get_items(page: int = 1, user=Depends(manager)):
+    print('page:', page)
+    conn.execute("BEGIN TRANSACTION")  # 트랜잭션 시작
     # 칼럼명 같이 가져오기
     conn.row_factory = sqlite3.Row
     cur = conn.cursor()
+    
+    # 전체 데이터 수 계산
+    total_rows = cur.execute("SELECT COUNT(*) FROM items").fetchone()[0]
+
+    # 페이지당 행 수와 총 페이지 수 계산
+    items_per_page = 10
+    total_pages = (total_rows / items_per_page) if (total_rows % items_per_page == 0) else (total_rows / items_per_page + 1) #items_per_page
+    offset = (page - 1) * items_per_page
+    # 유효한 페이지 범위 확인
+    if page < 1 or page > total_pages:
+        conn.execute("ROLLBACK")  # 트랜잭션 롤백
+        return JSONResponse(status_code=400, content={"message": "Invalid page number."})
+    
     rows = cur.execute(f"""
-                       SELECT * from items ORDER BY insertAt DESC LIMIT 10;
-                       """).fetchall()
+                       SELECT * from items ORDER BY insertAt DESC LIMIT ? OFFSET ?;
+                       """, (items_per_page, offset)).fetchall()
+    
+    conn.execute("COMMIT")  # 트랜잭션 커밋
     
     return JSONResponse(
         jsonable_encoder(dict(row) for row in rows)
