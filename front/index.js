@@ -1,3 +1,8 @@
+// const Pagination = require("./pagination");
+// const pagination = new Pagination();
+// pagination.renderPageBtn();
+// pagination.renderMoreBtn();
+
 const calculateTime = (timestamp) => {
   const curTime = new Date().getTime() - 9 * 60 * 60 * 1000;
   const time = new Date(curTime - timestamp);
@@ -91,6 +96,14 @@ paginationBtns.forEach((btn, index) => {
   });
 });
 
-loadMoreBtn.addEventListener("click", () => {});
+loadMoreBtn.addEventListener("click", () => {
+  updatePageBtn();
+});
+
+const updatePageBtn = () => {
+  paginationBtns.forEach((btn) => {
+    btn.innerText = Number(btn.innerText) + 5;
+  });
+};
 
 fetchList(currentPage);
